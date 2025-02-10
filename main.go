@@ -15,7 +15,8 @@ func main() {
 
 	r.HandleFunc("/", getShopHandler).Methods(http.MethodGet)
 	r.HandleFunc("/getshop/{id}", getShopDyIdHandler).Methods(http.MethodGet)
-	r.HandleFunc("/createshop", createShopHandler).Methods(http.MethodPost)
+	r.HandleFunc("/createshop", createShopHandler).Methods(http.MethodPut)
+	r.HandleFunc("/deleteshop/{id}", deleteShopByIdHandler).Methods(http.MethodDelete)
 
 	err := http.ListenAndServe(":8080", r)
 	if err != nil {
@@ -45,9 +46,7 @@ func getShopHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(file)
 }
 
-func getShopDyIdHandler(w http.ResponseWriter, r *http.Request) {
-	m := mux.Vars(r)
-
+func getShops() []Shop {
 	file, err := os.ReadFile("shop.json")
 	if err != nil {
 		panic(err)
@@ -59,18 +58,35 @@ func getShopDyIdHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	shop, err := findShopById(m["id"], shops)
+	return shops
+}
+
+func deleteShopByIdHandlerV2(w http.ResponseWriter, r *http.Request) {
+	m := mux.Vars(r)
+
+	shops := getShops()
+
+	_, err := findShopById(m["id"], shops)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("shop doesnt exist"))
 		return
 	}
 
-	byteShop, err := json.Marshal(shop)
-	if err != nil {
-		e := fmt.Errorf("could not serialize")
-		panic(e)
+	var index int
+
+	for i := range shops {
+		if shops[i].Id == m["id"] {
+			index = i
+
+			break
+		}
 	}
+
+	newShops := append(shops[:index], shops[index+1:]...)
+
+	// save updated shops to  file
+
 	w.Write(byteShop)
 }
 
@@ -98,9 +114,41 @@ func createShopHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = os.WriteFile("newStore.json", rBody, os.ModePerm)
-	if err != nil {
-		panic(err)
+	shops := getShops()
+
+	for _, shop := range shops {
+		if newShop.Id == shop.Id {
+			w.Write([]byte("shop already exists"))
+
+			return
+		}
 	}
+
+	shops = append(shops, newShop)
 	w.Write([]byte("shop was successfully created"))
+
+	updatedShops, err := json.MarshalIndent(shops, " ", "")
+	if err != nil {
+		fmt.Println("Failed to marshal")
+	}
+
+	err = os.WriteFile("shop.json", updatedShops, os.ModePerm)
+	if err != nil {
+		fmt.Println("Failed to write")
+	}
+
+}
+
+func deleteShopByIdHandler(w http.ResponseWriter, r *http.Request) {
+	m := mux.Vars(r)
+
+	shops := getShops()
+	shop, err := findShopById(m["id"], shops)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("shop doesnt exist"))
+		return
+	}
+
+	shops = append(shops[:shop])
 }

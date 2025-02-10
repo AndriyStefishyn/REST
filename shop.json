@@ -1,30 +1,44 @@
 [
-  {
-    "id" : "1",
-    "version": 1,
-    "name": "Armani",
-    "location": "Via Roma 10",
-    "description": "This is very good shop"
-  },
-  {
-    "id": "2",
-    "version": 2,
-    "name": "Gucci",
-    "location": "Via Milano 15",
-    "description": "This is Gucci shop"
-  },
-  {
-    "id": "3",
-    "version": 3,
-    "name": "Dolce&Gabbana",
-    "location": "Via Torino 23",
-    "description": "This is dolcegabbana shop"
-  },
-  {
-    "id": "4",
-    "version": 4,
-    "name": "Versace",
-    "location": "Via Arona 1",
-    "description": "This is versace shop"
-  }
-]
+ {
+ "id": "1",
+ "version": 1,
+ "name": "Armani",
+ "location": "Via Roma 10",
+ "description": "This is very good shop"
+ },
+ {
+ "id": "2",
+ "version": 2,
+ "name": "Gucci",
+ "location": "Via Milano 15",
+ "description": "This is Gucci shop"
+ },
+ {
+ "id": "3",
+ "version": 3,
+ "name": "Dolce\u0026Gabbana",
+ "location": "Via Torino 23",
+ "description": "This is dolcegabbana shop"
+ },
+ {
+ "id": "4",
+ "version": 4,
+ "name": "Versace",
+ "location": "Via Arona 1",
+ "description": "This is versace shop"
+ },
+ {
+ "id": "43",
+ "version": 1,
+ "name": "Versace",
+ "location": "Via Arona 2",
+ "description": "This is versace shop"
+ },
+ {
+ "id": "8679458",
+ "version": 1,
+ "name": "Versace",
+ "location": "Via Arona 2",
+ "description": "This is versace shop"
+ }
+ ]
